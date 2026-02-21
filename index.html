@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>RedSparky Leaderboard</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background: #0d0d0d;
+            color: #ff003c;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .leaderboard-card {
+            border: 2px solid #ff003c;
+            box-shadow: 0 0 15px #ff003c;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            background: rgba(255, 0, 60, 0.05);
+        }
+        h1 { text-shadow: 2px 2px #5f00ff; text-align: center; }
+        .user-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            padding: 10px 0;
+        }
+        .score { color: #00f3ff; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>[RED_SPARKY_TOP]</h1>
+    <div class="leaderboard-card" id="leaderboard">
+        <p style="text-align: center;">Синхронизация...</p>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Развернуть на весь экран
+
+        // Функция для получения данных (можно передавать через initData или отдельный API)
+        async function updateLeaderboard() {
+            // В реальном шоу здесь будет fetch к вашему API
+            // Для примера - имитация данных
+            const mockData = [
+                {name: "Vova", score: 2500},
+                {name: "Admin", score: 2100},
+                {name: "Guest_45", score: 1800}
+            ];
+            
+            const container = document.getElementById('leaderboard');
+            container.innerHTML = mockData.map((u, i) => `
+                <div class="user-row">
+                    <span>${i+1}. ${u.name}</span>
+                    <span class="score">${u.score} V-Bits</span>
+                </div>
+            `).join('');
+        }
+        
+        updateLeaderboard();
+    </script>
+</body>
+</html>
