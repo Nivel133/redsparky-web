@@ -256,7 +256,7 @@
         async function updateLeaderboard() {
             const leaderboardBox = document.getElementById('leaderboard');
             try {
-                const response = await fetch(`${NGROK_URL}/data`);
+                const response = await fetch(`${NGROK_URL}`);
                 
                 if (!response.ok) {
                     throw new Error(`СЕТЕВАЯ ОШИБКА: ${response.status} ${response.statusText}. Проверьте ngrok и api.py`);
