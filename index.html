@@ -6,8 +6,11 @@
     <title>RED SPARKIE: SYSTEM_OVERRIDE</title>
     <style>
         :root {
-            --neon-color: #ff003c;
-            --matrix-color: rgba(255, 0, 60, 0.15);
+            --neon-red: #ff003c;
+            --neon-blue: #00f3ff;
+            --neon-green: #00ff66;
+            --matrix-color-bg: rgba(255, 0, 60, 0.1);
+            --matrix-color-fg: #ff003c;
         }
 
         body, html {
@@ -15,10 +18,17 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background: #050505;
-            color: var(--neon-color);
-            font-family: 'Courier New', monospace;
+            background: #0a0a0a; /* Очень темный фон */
+            color: var(--neon-red);
+            font-family: 'Press Start 2P', 'Courier New', monospace; /* Футуристический пиксельный шрифт */
             overflow: hidden;
+            text-shadow: 0 0 5px var(--neon-red);
+        }
+
+        /* Загрузка пиксельного шрифта, если нет локального */
+        @font-face {
+            font-family: 'Press Start 2P';
+            src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         }
 
         /* Фон "Цифровой дождь" */
@@ -27,6 +37,7 @@
             top: 0;
             left: 0;
             z-index: -1;
+            filter: blur(0.5px); /* Небольшое размытие для атмосферы */
         }
 
         .container {
@@ -36,63 +47,161 @@
             justify-content: center;
             height: 100vh;
             z-index: 1;
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         /* Глитч-эффект для заголовка */
-        .glitch {
-            font-size: 3rem;
+        .glitch-text {
+            font-size: clamp(2rem, 8vw, 5rem); /* Адаптивный размер */
             font-weight: bold;
             text-transform: uppercase;
             position: relative;
-            text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
-                         0.025em 0.04em 0 #fffc00;
-            animation: glitch 725ms infinite;
+            text-shadow: 0.03em 0 0 var(--neon-blue), -0.02em -0.02em 0 var(--neon-green),
+                         0.01em 0.04em 0 var(--neon-red);
+            animation: glitch-anim 1s infinite alternate linear;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
         }
 
-        @keyframes glitch {
-            0% { text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00; }
-            14% { text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00; }
-            15% { text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff, -0.05em -0.05em 0 #fffc00; }
-            49% { text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.035em 0 #fc00ff, -0.05em -0.05em 0 #fffc00; }
-            50% { text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff, 0 -0.04em 0 #fffc00; }
-            99% { text-shadow: 0.05em 0.035em 0 #00fffc, 0.03em 0 0 #fc00ff, 0 -0.04em 0 #fffc00; }
-            100% { text-shadow: -0.025em 0 0 #00fffc, -0.025em -0.025em 0 #fc00ff, -0.025em -0.05em 0 #fffc00; }
+        @keyframes glitch-anim {
+            0% {
+                text-shadow: 0.03em 0 0 var(--neon-blue), -0.02em -0.02em 0 var(--neon-green), 0.01em 0.04em 0 var(--neon-red);
+                transform: translate(0em, 0em);
+            }
+            25% {
+                text-shadow: -0.01em -0.03em 0 var(--neon-green), 0.02em 0 0 var(--neon-red), -0.03em 0.01em 0 var(--neon-blue);
+                transform: translate(0.01em, 0.02em);
+            }
+            50% {
+                text-shadow: 0.02em 0.02em 0 var(--neon-red), -0.01em 0 0 var(--neon-blue), 0.03em -0.03em 0 var(--neon-green);
+                transform: translate(-0.02em, -0.01em);
+            }
+            75% {
+                text-shadow: -0.03em 0.01em 0 var(--neon-blue), 0.01em -0.02em 0 var(--neon-green), -0.02em 0.03em 0 var(--neon-red);
+                transform: translate(0.02em, 0.01em);
+            }
+            100% {
+                text-shadow: 0.03em 0 0 var(--neon-blue), -0.02em -0.02em 0 var(--neon-green), 0.01em 0.04em 0 var(--neon-red);
+                transform: translate(0em, 0em);
+            }
+        }
+
+        .status-message {
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+            margin-bottom: 25px;
+            animation: pulse-green 2s infinite alternate;
+        }
+
+        @keyframes pulse-green {
+            from { text-shadow: 0 0 5px var(--neon-green); }
+            to { text-shadow: 0 0 15px var(--neon-green); }
         }
 
         .leaderboard-box {
-            width: 90%;
-            max-width: 500px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--neon-color);
-            box-shadow: 0 0 20px var(--neon-color), inset 0 0 10px var(--neon-color);
-            padding: 30px;
-            backdrop-filter: blur(5px);
-            border-radius: 5px;
+            width: 95%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 3px solid var(--neon-red);
+            box-shadow: 0 0 25px var(--neon-red), inset 0 0 15px var(--neon-red);
+            padding: 30px 20px;
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            animation: pulse-border 3s infinite alternate;
+            box-sizing: border-box;
+            max-height: 70vh; /* Ограничиваем высоту */
+            overflow-y: auto; /* Добавляем прокрутку, если много элементов */
+        }
+
+        /* Стилизация скроллбара */
+        .leaderboard-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        .leaderboard-box::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        .leaderboard-box::-webkit-scrollbar-thumb {
+            background: var(--neon-red);
+            border-radius: 10px;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+        .leaderboard-box::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        @keyframes pulse-border {
+            from { border-color: var(--neon-red); box-shadow: 0 0 15px var(--neon-red), inset 0 0 8px var(--neon-red); }
+            to { border-color: var(--neon-blue); box-shadow: 0 0 25px var(--neon-blue), inset 0 0 12px var(--neon-blue); }
         }
 
         .user-row {
             display: flex;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px dashed rgba(255, 0, 60, 0.3);
-            font-size: 1.2rem;
-            transition: all 0.3s;
+            align-items: center;
+            padding: 18px 10px;
+            border-bottom: 1px dashed rgba(255, 0, 60, 0.4);
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            transition: all 0.4s ease-in-out;
+            position: relative;
+        }
+
+        .user-row:last-child {
+            border-bottom: none;
         }
 
         .user-row:hover {
-            background: rgba(255, 0, 60, 0.1);
-            transform: scale(1.02);
+            background: rgba(0, 243, 255, 0.08); /* Синее свечение при наведении */
+            transform: scale(1.03);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
         }
 
-        .rank { color: #555; margin-right: 15px; }
-        .name { flex-grow: 1; text-transform: uppercase; letter-spacing: 2px; }
-        .score { color: #00f3ff; text-shadow: 0 0 5px #00f3ff; }
+        .rank {
+            color: #555;
+            margin-right: 15px;
+            font-size: 0.8em;
+            width: 30px;
+            text-align: right;
+            text-shadow: none;
+            color: rgba(255, 255, 255, 0.3);
+        }
+        .name {
+            flex-grow: 1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--neon-red);
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+        .score {
+            color: var(--neon-blue);
+            text-shadow: 0 0 12px var(--neon-blue);
+            font-weight: bold;
+            margin-left: 15px;
+        }
 
-        .status-bar {
+        .error-display {
+            color: yellow;
+            background: rgba(139, 0, 0, 0.8);
+            border: 2px solid yellow;
+            padding: 20px;
             margin-top: 20px;
-            font-size: 0.8rem;
-            color: #444;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-align: center;
+            box-shadow: 0 0 15px yellow;
         }
+
+        .bottom-status {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-shadow: none;
+        }
+
     </style>
 </head>
 <body>
@@ -100,20 +209,21 @@
     <canvas id="matrix-canvas"></canvas>
 
     <div class="container">
-        <div class="glitch" data-text="RED SPARKIE">RED SPARKIE</div>
-        <p>SYSTEM STATUS: <span style="color: #0f0;">ACTIVE</span></p>
+        <div class="glitch-text" data-text="RED SPARKIE">RED SPARKIE</div>
+        <p class="status-message">SYSTEM STATUS: <span style="color: var(--neon-green);">ACTIVE</span></p>
         
         <div class="leaderboard-box" id="leaderboard">
-            <div style="text-align: center;">ИНИЦИАЛИЗАЦИЯ ПОТОКА ДАННЫХ...</div>
+            <div style="text-align: center; font-size: 1.2rem; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue);">ИНИЦИАЛИЗАЦИЯ ПОТОКА ДАННЫХ...</div>
         </div>
 
-        <div class="status-bar">CONNECTED TO CORE_SERVER via NGROK_TUNNEL</div>
+        <div class="bottom-status">CONNECTED TO CORE_SERVER via NGROK_TUNNEL</div>
     </div>
 
     <script>
         // --- КОНФИГУРАЦИЯ ---
+        // !!! ВСТАВЬТЕ СВОЮ АКТУАЛЬНУЮ ССЫЛКУ NGROK СЮДА (БЕЗ / В КОНЦЕ) !!!
         const NGROK_URL = "https://ishaan-diphycercal-hilariously.ngrok-free.dev"; 
-
+        
         // --- ЭФФЕКТ МАТРИЦЫ ---
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
@@ -121,25 +231,76 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const alphabet = "01";
-        const fontSize = 16;
+        const alphabet = "01CODE_RED"; // Теперь буквы тоже падают
+        const fontSize = 18;
         const columns = canvas.width / fontSize;
         const drops = [];
 
         for (let x = 0; x < columns; x++) drops[x] = 1;
 
         function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; // Более мягкий хвост
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#ff003c1a"; // Полупрозрачный красный
-            ctx.font = fontSize + "px monospace";
+            ctx.fillStyle = var_neon_red_1a; // Полупрозрачный красный
+            ctx.font = fontSize + "px 'Press Start 2P'"; // Новый шрифт для матрицы
 
             for (let i = 0; i < drops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.96) drops[i] = 0; // Шанс возвращения
                 drops[i]++;
             }
         }
 
-        // --- ОБНОВЛЕНИЕ ДАННЫХ
+        // --- ОБНОВЛЕНИЕ ДАННЫХ (С ОБРАБОТКОЙ ОШИБОК) ---
+        async function updateLeaderboard() {
+            const leaderboardBox = document.getElementById('leaderboard');
+            try {
+                const response = await fetch(`${NGROK_URL}/data`);
+                
+                if (!response.ok) {
+                    throw new Error(`СЕТЕВАЯ ОШИБКА: ${response.status} ${response.statusText}. Проверьте ngrok и api.py`);
+                }
+                
+                const data = await response.json();
+
+                if (!Array.isArray(data)) {
+                    throw new Error("ОШИБКА ДАННЫХ: Сервер вернул некорректный формат.");
+                }
+                
+                console.log("Получены данные:", data);
+
+                if (data.length === 0) {
+                    leaderboardBox.innerHTML = '<div style="text-align: center; color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue);">СПИСОК ПУСТ (ОЖИДАНИЕ АКТИВНОСТИ)</div>';
+                    return;
+                }
+
+                leaderboardBox.innerHTML = data.map((u, i) => `
+                    <div class="user-row">
+                        <span class="rank">${(i + 1).toString().padStart(2, '0')}</span>
+                        <span class="name">${u.name}</span>
+                        <span class="score">${u.score} VBITS</span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error("КРИТИЧЕСКИЙ СБОЙ ФРОНТЕНДА:", e);
+                leaderboardBox.innerHTML = `<div class="error-display">
+                    🚨 СБОЙ СИСТЕМЫ 🚨<br>
+                    ${e.message}<br>
+                    <span style="font-size:0.7em;">Проверьте: 1. NGROK запущен? 2. API.PY запущен? 3. Ссылка NGROK верна?</span>
+                </div>`;
+            }
+        }
+
+        setInterval(drawMatrix, 30); // Чуть быстрее
+        setInterval(updateLeaderboard, 5000);
+        updateLeaderboard(); // Первый запуск сразу
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawMatrix();
+        });
+    </script>
+</body>
+</html>
